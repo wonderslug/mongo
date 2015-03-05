@@ -1,4 +1,4 @@
-// js_debug.h
+// debug.h
 
 /**
  *    Copyright (C) 2010 10gen Inc.
@@ -40,6 +40,6 @@ namespace mongo {
      * This must be the first thread started from the main thread. Call this immediately after
      * initializeServerGlobalState().
      */
-    void startJSDebugMessageProcessingThread(Scope *scope);
+    void startDebugMessageProcessingThread(Scope *scope, int port);
         
 } // namespace mongo
