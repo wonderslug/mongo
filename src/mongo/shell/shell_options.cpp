@@ -105,6 +105,11 @@ namespace mongo {
 
         options->addOptionChaining("ipv6", "ipv6", moe::Switch,
                 "enable IPv6 support (disabled by default)");
+        
+        options->addOptionChaining("enableDebug", "enableDebug", moe::Switch,
+                                   "enable javascript debugging");
+        
+        options->addOptionChaining("debugPort", "debugPort", moe::String, "port to listen on for the javascript debugger. 9222 by default");
 
         Status ret = Status::OK();
 #ifdef MONGO_SSL
@@ -239,6 +244,7 @@ namespace mongo {
         if (params.count("norc")) {
             shellGlobalParams.norc = true;
         }
+
         if (params.count("files")) {
             shellGlobalParams.files = params["files"].as< vector<string> >();
         }
@@ -259,6 +265,17 @@ namespace mongo {
                                                 "Unknown writeMode option: " << mode);
             }
             shellGlobalParams.writeMode = mode;
+        }
+        
+        if (params.count("enableDebug")) {
+            shellGlobalParams.enableDebug = true;
+        }
+        
+        if (params.count("debugPort")) {
+            shellGlobalParams.debugPort = params["debugPort"].as<string>();
+        }
+        else {
+            shellGlobalParams.debugPort = "9222";
         }
 
         /* This is a bit confusing, here are the rules:

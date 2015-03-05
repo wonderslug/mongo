@@ -51,6 +51,7 @@
 #include "mongo/logger/logger.h"
 #include "mongo/logger/message_event_utf8_encoder.h"
 #include "mongo/scripting/engine.h"
+#include "mongo/shell/debug.h"
 #include "mongo/shell/linenoise.h"
 #include "mongo/shell/shell_options.h"
 #include "mongo/shell/shell_utils.h"
@@ -66,7 +67,7 @@
 #include "mongo/util/startup_test.h"
 #include "mongo/util/text.h"
 #include "mongo/util/version.h"
-#include "mongo/shell/js_debug.h"
+
 
 #ifdef _WIN32
 #include <io.h>
@@ -692,7 +693,10 @@ int _main( int argc, char* argv[], char **envp ) {
     mongo::globalScriptEngine->setScopeInitCallback( mongo::shell_utils::initScope );
     auto_ptr< mongo::Scope > scope( mongo::globalScriptEngine->newScope() );
     shellMainScope = scope.get();
-    startJSDebugMessageProcessingThread(shellMainScope);
+    if (shellGlobalParams.enableDebug) {
+        int debugPort = atoi(shellGlobalParams.debugPort.c_str());
+        startDebugMessageProcessingThread(shellMainScope, debugPort);
+    }
 
     if( shellGlobalParams.runShell )
         cout << "type \"help\" for help" << endl;

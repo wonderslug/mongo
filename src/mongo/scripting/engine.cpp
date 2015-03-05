@@ -409,6 +409,7 @@ namespace {
         string getError() { return _real->getError(); }
         bool hasOutOfMemoryException() { return _real->hasOutOfMemoryException(); }
         void processDebugMessages() { return; }
+        void enableDebug(int port){ return; }
         void rename(const char* from, const char* to) { _real->rename(from, to); }
         double getNumber(const char* field) { return _real->getNumber(field); }
         string getString(const char* field) { return _real->getString(field); }

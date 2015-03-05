@@ -48,6 +48,7 @@ namespace mongo {
         std::string port;
         std::vector<std::string> files;
 
+
         std::string username;
         std::string password;
         bool usingPassword;
@@ -65,6 +66,9 @@ namespace mongo {
         bool autoKillOp;
         bool useWriteCommandsDefault;
         std::string writeMode;
+
+        bool enableDebug;
+        std::string debugPort;
 
         ShellGlobalParams() : autoKillOp(false),
                               useWriteCommandsDefault(true),

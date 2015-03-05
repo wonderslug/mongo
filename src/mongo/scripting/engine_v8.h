@@ -198,6 +198,10 @@ namespace mongo {
         virtual bool hasOutOfMemoryException();
         
         virtual void processDebugMessages();
+        
+        virtual void enableDebug(int port);
+        
+        
 
         /**
          * Run the garbage collector on this scope (native function).  @see GCV8 for the

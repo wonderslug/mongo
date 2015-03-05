@@ -1,4 +1,4 @@
-/** @file js_debug.cpp */
+/** @file debug.cpp */
 
 /*
  *    Copyright (C) 2010 10gen Inc.
@@ -30,7 +30,7 @@
 
 #include "mongo/platform/basic.h"
 
-#include "js_debug.h"
+#include "debug.h"
 #include "mongo/db/client.h"
 #include <boost/thread.hpp>
 #include <errno.h>
@@ -49,8 +49,8 @@
 namespace mongo {
     
 namespace {
-    void jsDebugMessageProcessingThread(Scope *scope) {
-        Client::initThread( "jsDebugMessageProcessingThread" );
+    void debugMessageProcessingThread(Scope *scope) {
+        Client::initThread( "debugMessageProcessingThread" );
         fd_set set;
         int terminate = false;
         struct timeval timeout;
@@ -71,8 +71,8 @@ namespace {
             
             // reset the selecttimeout so we can catch any new
             // sockets that have joined
-            timeout.tv_sec = 0;
-            timeout.tv_usec = 500000;
+            timeout.tv_sec = 1;
+            timeout.tv_usec = 0;
             
             // select on any read activity so that we catch any debug messages
             errno = 0;
@@ -90,7 +90,8 @@ namespace {
     }
 } // namespace
     
-    void startJSDebugMessageProcessingThread(Scope *scope) {
-        boost::thread(jsDebugMessageProcessingThread, scope).detach();
+    void startDebugMessageProcessingThread(Scope *scope, int port) {
+        scope->enableDebug(port);
+        boost::thread(debugMessageProcessingThread, scope).detach();
     }
 }// namespace mongo

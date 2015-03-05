@@ -487,7 +487,7 @@ namespace mongo {
         return out.str();
     }
 
-    v8::Persistent<v8::Context> debug_message_context;
+    //v8::Persistent<v8::Context> debug_message_context;
     
     V8Scope::V8Scope(V8ScriptEngine * engine)
         : _engine(engine),
@@ -504,10 +504,7 @@ namespace mongo {
         _isolate.set(v8::Isolate::New());
         v8::Isolate::Scope iscope(_isolate);
               
-        v8::Locker locker(_isolate);
 
-        //v8::Debug::SetDebugMessageDispatchHandler(DispatchDebugMessages, true);
-        v8::Debug::EnableAgent("mongo", 5050, false);
         
 
               
@@ -589,6 +586,12 @@ namespace mongo {
         v8::Debug::ProcessDebugMessages();
         return;
     }
+    
+    void V8Scope::enableDebug(int port) {
+        V8_SIMPLE_HEADER
+        v8::Debug::EnableAgent("mongo", port, false);
+    }
+    
 
     
     bool V8Scope::hasOutOfMemoryException() {
