@@ -66,6 +66,7 @@
 #include "mongo/util/startup_test.h"
 #include "mongo/util/text.h"
 #include "mongo/util/version.h"
+#include "mongo/shell/js_debug.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -691,6 +692,7 @@ int _main( int argc, char* argv[], char **envp ) {
     mongo::globalScriptEngine->setScopeInitCallback( mongo::shell_utils::initScope );
     auto_ptr< mongo::Scope > scope( mongo::globalScriptEngine->newScope() );
     shellMainScope = scope.get();
+    startJSDebugMessageProcessingThread(shellMainScope);
 
     if( shellGlobalParams.runShell )
         cout << "type \"help\" for help" << endl;

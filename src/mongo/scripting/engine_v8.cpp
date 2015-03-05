@@ -487,7 +487,8 @@ namespace mongo {
         return out.str();
     }
 
-
+    v8::Persistent<v8::Context> debug_message_context;
+    
     V8Scope::V8Scope(V8ScriptEngine * engine)
         : _engine(engine),
           _connectState(NOT),
@@ -498,10 +499,18 @@ namespace mongo {
           _opId(0),
           _opCtx(NULL) {
 
+              
         // create new isolate and enter it via a scope
         _isolate.set(v8::Isolate::New());
         v8::Isolate::Scope iscope(_isolate);
+              
+        v8::Locker locker(_isolate);
 
+        //v8::Debug::SetDebugMessageDispatchHandler(DispatchDebugMessages, true);
+        v8::Debug::EnableAgent("mongo", 5050, false);
+        
+
+              
         // lock the isolate and enter the context
         v8::Locker l(_isolate);
         v8::HandleScope handleScope;
@@ -575,6 +584,13 @@ namespace mongo {
         unregisterOperation();
     }
 
+    void V8Scope::processDebugMessages() {
+        V8_SIMPLE_HEADER
+        v8::Debug::ProcessDebugMessages();
+        return;
+    }
+
+    
     bool V8Scope::hasOutOfMemoryException() {
         V8_SIMPLE_HEADER
         if (!_context.IsEmpty())
@@ -1846,4 +1862,9 @@ namespace mongo {
         return Status::OK();
     }
 
-} // namespace mongo
+    
+
+
+}
+// namespace mongo
+

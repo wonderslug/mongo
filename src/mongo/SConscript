@@ -1242,7 +1242,8 @@ coreShellFiles = [ "shell/bench.cpp",
                    "shell/linenoise.cpp",
                    "shell/linenoise_utf8.cpp",
                    "shell/mk_wcwidth.cpp",
-                   "shell/shell_options_init.cpp" ]
+                   "shell/shell_options_init.cpp",
+                   "shell/js_debug.cpp"]
 
 if not has_option('noshell') and usev8:
     env.Library("shell_core", coreShellFiles,

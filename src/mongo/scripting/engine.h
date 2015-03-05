@@ -92,6 +92,7 @@ namespace mongo {
         virtual std::string getError() = 0;
 
         virtual bool hasOutOfMemoryException() = 0;
+        virtual void processDebugMessages() = 0;
 
         virtual bool isKillPending() const = 0;
 
