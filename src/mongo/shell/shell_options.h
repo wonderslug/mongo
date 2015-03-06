@@ -68,7 +68,7 @@ namespace mongo {
         std::string writeMode;
 
         bool enableDebug;
-        std::string debugPort;
+        int debugPort;
 
         ShellGlobalParams() : autoKillOp(false),
                               useWriteCommandsDefault(true),

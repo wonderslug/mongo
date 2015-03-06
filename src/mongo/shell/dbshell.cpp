@@ -694,7 +694,7 @@ int _main( int argc, char* argv[], char **envp ) {
     auto_ptr< mongo::Scope > scope( mongo::globalScriptEngine->newScope() );
     shellMainScope = scope.get();
     if (shellGlobalParams.enableDebug) {
-        int debugPort = atoi(shellGlobalParams.debugPort.c_str());
+        int debugPort = shellGlobalParams.debugPort;
         startDebugMessageProcessingThread(shellMainScope, debugPort);
     }
 

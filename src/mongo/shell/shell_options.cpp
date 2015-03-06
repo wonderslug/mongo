@@ -109,7 +109,7 @@ namespace mongo {
         options->addOptionChaining("enableDebug", "enableDebug", moe::Switch,
                                    "enable javascript debugging");
         
-        options->addOptionChaining("debugPort", "debugPort", moe::String, "port to listen on for the javascript debugger. 9222 by default");
+        options->addOptionChaining("debugPort", "debugPort", moe::Int, "port to listen on for the javascript debugger. 9222 by default");
 
         Status ret = Status::OK();
 #ifdef MONGO_SSL
@@ -272,10 +272,10 @@ namespace mongo {
         }
         
         if (params.count("debugPort")) {
-            shellGlobalParams.debugPort = params["debugPort"].as<string>();
+            shellGlobalParams.debugPort = params["debugPort"].as<int>();
         }
         else {
-            shellGlobalParams.debugPort = "9222";
+            shellGlobalParams.debugPort = 9222;
         }
 
         /* This is a bit confusing, here are the rules:
