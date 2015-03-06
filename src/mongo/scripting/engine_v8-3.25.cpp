@@ -599,6 +599,18 @@ namespace mongo {
     V8Scope::~V8Scope() {
         unregisterOperation();
     }
+    
+    void V8Scope::processDebugMessages() {
+        V8_SIMPLE_HEADER
+        v8::Debug::ProcessDebugMessages();
+        return;
+    }
+    
+    void V8Scope::enableDebug(int port) {
+        V8_SIMPLE_HEADER
+        v8::Debug::EnableAgent("mongo", port, false);
+    }
+    
 
     bool V8Scope::hasOutOfMemoryException() {
         V8_SIMPLE_HEADER

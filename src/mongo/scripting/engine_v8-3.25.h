@@ -32,6 +32,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <v8.h>
+#include <v8-debug.h>
 #include <set>
 #include <string>
 #include <vector>
@@ -203,6 +204,10 @@ namespace mongo {
         virtual std::string getError() { return _error; }
 
         virtual bool hasOutOfMemoryException();
+                
+        virtual void processDebugMessages();
+        
+        virtual void enableDebug(int port);
 
         /**
          * Run the garbage collector on this scope (native function).  @see GCV8 for the
