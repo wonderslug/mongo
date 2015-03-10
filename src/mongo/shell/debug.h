@@ -40,6 +40,6 @@ namespace mongo {
      * This must be the first thread started from the main thread. Call this immediately after
      * initializeServerGlobalState().
      */
-    void startDebugMessageProcessingThread(Scope *scope, int port);
+    void startDebugProcessingThread(Scope *scope, int port);
         
 } // namespace mongo

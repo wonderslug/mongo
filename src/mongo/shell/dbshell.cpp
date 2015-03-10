@@ -695,7 +695,7 @@ int _main( int argc, char* argv[], char **envp ) {
     shellMainScope = scope.get();
     if (shellGlobalParams.enableDebug) {
         int debugPort = shellGlobalParams.debugPort;
-        startDebugMessageProcessingThread(shellMainScope, debugPort);
+        startDebugProcessingThread(shellMainScope, debugPort);
     }
 
     if( shellGlobalParams.runShell )

@@ -49,15 +49,17 @@
 namespace mongo {
     
 namespace {
-    void debugMessageProcessingThread(Scope *scope) {
+    void debugProcessingThread(Scope *scope) {
         Client::initThread( "debugMessageProcessingThread" );
-        fd_set set;
+        fd_set readSet, writeSet, exceptSet;
         int terminate = false;
         struct timeval timeout;
         
         while (!terminate) {
             // cleanout the file descriptor set.
-            FD_ZERO (&set);
+            FD_ZERO (&readSet);
+            FD_ZERO (&writeSet);
+            FD_ZERO (&exceptSet);
             
             // find the currently open file descriptors
             // so we will catch files as well as debug sockets
@@ -66,7 +68,7 @@ namespace {
             for (int i = 3; i < FD_SETSIZE; ++i){
                 errno = 0;
                 if (fcntl(i, F_GETFL) < 0 && errno == EBADF)  continue;
-                FD_SET(i, &set);
+                FD_SET(i, &readSet);
             }
             
             // reset the selecttimeout so we can catch any new
@@ -76,7 +78,7 @@ namespace {
             
             // select on any read activity so that we catch any debug messages
             errno = 0;
-            int activity = select(FD_SETSIZE, &set, NULL, NULL, &timeout);
+            int activity = select(FD_SETSIZE, &readSet, &writeSet, &exceptSet, &timeout);
             
             // signal the scope to process messages
             scope->processDebugMessages();
@@ -90,8 +92,8 @@ namespace {
     }
 } // namespace
     
-    void startDebugMessageProcessingThread(Scope *scope, int port) {
+    void startDebugProcessingThread(Scope *scope, int port) {
         scope->enableDebug(port);
-        boost::thread(debugMessageProcessingThread, scope).detach();
+        boost::thread(debugProcessingThread, scope).detach();
     }
 }// namespace mongo
